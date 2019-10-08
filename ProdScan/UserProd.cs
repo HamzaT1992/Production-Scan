@@ -13,7 +13,15 @@ namespace ProdScan
         public int Client { get; set; }
         public int FOURNISSEUR { get; set; }
         public int SCAN { get; set; }
+        public int Total { get; set; }
 
-        public UserProd() { }
+        public UserProd()
+        {
+
+        }
+        public void calculTotal()
+        {
+            Total = BANQUE + Client + FOURNISSEUR + SCAN;
+        }
     }
 }

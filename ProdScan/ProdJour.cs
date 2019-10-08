@@ -57,7 +57,9 @@ namespace ProdScan
                     Client = getPPCount(ud, "Client"),
                     FOURNISSEUR = getPPCount(ud, "FOURNISSEUR"),
                     SCAN = getPPCount(ud, "SCAN"),
+
                 };
+                userProd.calculTotal();
 
 
 
@@ -75,12 +77,22 @@ namespace ProdScan
                                     .Select(f => new FileInfo(f))
                                     .Where(f => f.LastWriteTime.Date == dateTimePicker1.Value)
                                     .Sum(f => new PdfReader(f.FullName).NumberOfPages);
+                
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
             return prcount;
+        }
+
+
+        private int countTotal()
+        {
+            return Directory.GetFiles(chemin, "*.pdf", SearchOption.AllDirectories)
+                                    .Select(f => new FileInfo(f))
+                                    .Where(f => f.LastWriteTime.Date == dateTimePicker1.Value)
+                                    .Sum(f => new PdfReader(f.FullName).NumberOfPages);
         }
     }
 }
