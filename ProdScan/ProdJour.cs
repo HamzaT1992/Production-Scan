@@ -6,14 +6,82 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Telerik.WinControls;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Configuration;
+using System.IO;
+using iTextSharp.text.pdf;
 
 namespace ProdScan
 {
     public partial class ProdJour : Telerik.WinControls.UI.RadForm
     {
+        string chemin = ConfigurationManager.AppSettings["url"];
         public ProdJour()
         {
             InitializeComponent();
         }
+
+        private async void Form1_Load(object sender, EventArgs e)
+        {
+            dateTimePicker1.Value = DateTime.Today;
+            //label1.Visible = true;
+            radGridView1.DataSource = await Task.Run(() => dataLoad(dateTimePicker1.Value));
+            //label1.Visible = false;
+        }
+
+        private async void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            //label1.Visible = true;
+            radGridView1.DataSource = await Task.Run(() => dataLoad(dateTimePicker1.Value));
+            //label1.Visible = false;
+        }
+
+        private List<UserProd> dataLoad(DateTime dt)
+        {
+
+            var usersDirectory = Directory.GetDirectories(chemin);
+            List<UserProd> users = new List<UserProd>();
+            foreach (var ud in usersDirectory)
+            {
+
+                var dn = new DirectoryInfo(ud).Name;
+                if (!dn.Contains(' '))
+                    continue;
+                var dparts = dn.Split(' ');
+                var un = dparts[1];
+                var userProd = new UserProd()
+                {
+                    Name = un,
+                    BANQUE = getPPCount(ud, "BANQUE"),
+                    Client = getPPCount(ud, "Client"),
+                    FOURNISSEUR = getPPCount(ud, "FOURNISSEUR"),
+                    SCAN = getPPCount(ud, "SCAN"),
+                };
+
+
+
+                users.Add(userProd);
+            }
+            return users;
+
+        }
+        private int getPPCount(string ud, string projet)
+        {
+            int prcount = 0;
+            try
+            {
+                prcount = Directory.GetFiles(Path.Combine(ud, projet), "*.pdf", SearchOption.AllDirectories)
+                                    .Select(f => new FileInfo(f))
+                                    .Where(f => f.LastWriteTime.Date == dateTimePicker1.Value)
+                                    .Sum(f => new PdfReader(f.FullName).NumberOfPages);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return prcount;
+        }
     }
 }
+

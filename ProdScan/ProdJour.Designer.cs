@@ -31,17 +31,17 @@
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
             this.fluentTheme1 = new Telerik.WinControls.Themes.FluentTheme();
             this.radGridView1 = new Telerik.WinControls.UI.RadGridView();
-            this.radDateTimePicker1 = new Telerik.WinControls.UI.RadDateTimePicker();
+            this.dateTimePicker1 = new Telerik.WinControls.UI.RadDateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.radGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radGridView1.MasterTemplate)).BeginInit();
             this.radGridView1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radDateTimePicker1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimePicker1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
             // radGridView1
             // 
-            this.radGridView1.Controls.Add(this.radDateTimePicker1);
+            this.radGridView1.Controls.Add(this.dateTimePicker1);
             this.radGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radGridView1.Location = new System.Drawing.Point(0, 0);
             // 
@@ -55,15 +55,15 @@
             // 
             // radDateTimePicker1
             // 
-            this.radDateTimePicker1.CalendarSize = new System.Drawing.Size(290, 320);
-            this.radDateTimePicker1.Location = new System.Drawing.Point(202, 0);
-            this.radDateTimePicker1.Name = "radDateTimePicker1";
-            this.radDateTimePicker1.Size = new System.Drawing.Size(164, 24);
-            this.radDateTimePicker1.TabIndex = 1;
-            this.radDateTimePicker1.TabStop = false;
-            this.radDateTimePicker1.Text = "mardi 8 octobre 2019";
-            this.radDateTimePicker1.ThemeName = "Fluent";
-            this.radDateTimePicker1.Value = new System.DateTime(2019, 10, 8, 12, 21, 0, 822);
+            this.dateTimePicker1.CalendarSize = new System.Drawing.Size(290, 320);
+            this.dateTimePicker1.Location = new System.Drawing.Point(202, 0);
+            this.dateTimePicker1.Name = "radDateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(164, 24);
+            this.dateTimePicker1.TabIndex = 1;
+            this.dateTimePicker1.TabStop = false;
+            this.dateTimePicker1.Text = "mardi 8 octobre 2019";
+            this.dateTimePicker1.ThemeName = "Fluent";
+            this.dateTimePicker1.Value = new System.DateTime(2019, 10, 8, 12, 21, 0, 822);
             // 
             // ProdJour
             // 
@@ -82,7 +82,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.radGridView1)).EndInit();
             this.radGridView1.ResumeLayout(false);
             this.radGridView1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radDateTimePicker1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimePicker1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
 
@@ -92,6 +92,6 @@
 
         private Telerik.WinControls.Themes.FluentTheme fluentTheme1;
         private Telerik.WinControls.UI.RadGridView radGridView1;
-        private Telerik.WinControls.UI.RadDateTimePicker radDateTimePicker1;
+        private Telerik.WinControls.UI.RadDateTimePicker dateTimePicker1;
     }
 }
