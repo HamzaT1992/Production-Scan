@@ -24,17 +24,21 @@ namespace ProdScan
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            dateTimePicker1.Value = DateTime.Today;
-            //label1.Visible = true;
-            radGridView1.DataSource = await Task.Run(() => dataLoad(dateTimePicker1.Value));
-            //label1.Visible = false;
+            radDateTimePicker1.Value = DateTime.Today;
+            radWaitingBar1.Visible = true;
+            radWaitingBar1.StartWaiting();
+            radGridView1.DataSource = await Task.Run(() => dataLoad(radDateTimePicker1.Value));
+            radWaitingBar1.StopWaiting();
+            radWaitingBar1.Visible = false;
         }
 
         private async void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
-            //label1.Visible = true;
-            radGridView1.DataSource = await Task.Run(() => dataLoad(dateTimePicker1.Value));
-            //label1.Visible = false;
+            radWaitingBar1.Visible = true;
+            radWaitingBar1.StartWaiting();
+            radGridView1.DataSource = await Task.Run(() => dataLoad(radDateTimePicker1.Value));
+            radWaitingBar1.StopWaiting();
+            radWaitingBar1.Visible = false;
         }
 
         private List<UserProd> dataLoad(DateTime dt)
@@ -75,7 +79,7 @@ namespace ProdScan
             {
                 prcount = Directory.GetFiles(Path.Combine(ud, projet), "*.pdf", SearchOption.AllDirectories)
                                     .Select(f => new FileInfo(f))
-                                    .Where(f => f.LastWriteTime.Date == dateTimePicker1.Value)
+                                    .Where(f => f.LastWriteTime.Date == radDateTimePicker1.Value)
                                     .Sum(f => new PdfReader(f.FullName).NumberOfPages);
                 
             }
@@ -87,13 +91,13 @@ namespace ProdScan
         }
 
 
-        private int countTotal()
-        {
-            return Directory.GetFiles(chemin, "*.pdf", SearchOption.AllDirectories)
-                                    .Select(f => new FileInfo(f))
-                                    .Where(f => f.LastWriteTime.Date == dateTimePicker1.Value)
-                                    .Sum(f => new PdfReader(f.FullName).NumberOfPages);
-        }
+        //private int countTotal()
+        //{
+        //    return Directory.GetFiles(chemin, "*.pdf", SearchOption.AllDirectories)
+        //                            .Select(f => new FileInfo(f))
+        //                            .Where(f => f.LastWriteTime.Date == dateTimePicker1.Value)
+        //                            .Sum(f => new PdfReader(f.FullName).NumberOfPages);
+        //}
     }
 }
 
