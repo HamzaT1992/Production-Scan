@@ -28,7 +28,7 @@ namespace ProdScan
             var totalDocs = valB[0] + valC[0] + valF[0] + valS[0];
             var TotalPages = valB[1] + valC[1] + valF[1] + valS[1];
 
-            Total = $"{totalDocs};{TotalPages}";
+            Total = $"{totalDocs} ; {TotalPages}";
         }
 
         private int[] getNumberOfDocsWithPages(string prg)

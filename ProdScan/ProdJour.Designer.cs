@@ -34,6 +34,7 @@
             this.radWaitingBar1 = new Telerik.WinControls.UI.RadWaitingBar();
             this.fadingRingWaitingBarIndicatorElement1 = new Telerik.WinControls.UI.FadingRingWaitingBarIndicatorElement();
             this.radDateTimePicker1 = new Telerik.WinControls.UI.RadDateTimePicker();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.radGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radGridView1.MasterTemplate)).BeginInit();
             this.radGridView1.SuspendLayout();
@@ -44,6 +45,7 @@
             // 
             // radGridView1
             // 
+            this.radGridView1.Controls.Add(this.button1);
             this.radGridView1.Controls.Add(this.radWaitingBar1);
             this.radGridView1.Controls.Add(this.radDateTimePicker1);
             this.radGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -104,6 +106,16 @@
             this.radDateTimePicker1.Value = new System.DateTime(2019, 10, 8, 12, 21, 0, 822);
             this.radDateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(454, 0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Export";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // ProdJour
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -137,5 +149,6 @@
         private Telerik.WinControls.UI.RadDateTimePicker radDateTimePicker1;
         private Telerik.WinControls.UI.RadWaitingBar radWaitingBar1;
         private Telerik.WinControls.UI.FadingRingWaitingBarIndicatorElement fadingRingWaitingBarIndicatorElement1;
+        private System.Windows.Forms.Button button1;
     }
 }
