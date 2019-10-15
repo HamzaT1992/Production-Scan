@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace ProdScan
 
         public UserProd()
         {
-
+            
         }
         public void calculTotal()
         {
@@ -28,7 +29,12 @@ namespace ProdScan
             var totalDocs = valB[0] + valC[0] + valF[0] + valS[0];
             var TotalPages = valB[1] + valC[1] + valF[1] + valS[1];
 
-            Total = $"{totalDocs} ; {TotalPages}";
+            Total = $"{totalDocs};{TotalPages}";
+            foreach (PropertyInfo property in typeof(UserProd).GetProperties())
+            {
+                var value = property.GetValue(this).ToString().Replace(";", "  ");
+                property.SetValue(this, value);
+            }
         }
 
         private int[] getNumberOfDocsWithPages(string prg)
