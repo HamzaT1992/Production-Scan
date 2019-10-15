@@ -17,7 +17,7 @@ namespace ProdScan
 
         public UserProd()
         {
-
+            
         }
         public void calculTotal()
         {
