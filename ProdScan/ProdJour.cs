@@ -72,22 +72,25 @@ namespace ProdScan
             return users;
 
         }
-        private int getPPCount(string ud, string projet)
+        private string getPPCount(string ud, string projet)
         {
-            int prcount = 0;
+            var docWithPages = "";
             try
             {
-                prcount = Directory.GetFiles(Path.Combine(ud, projet), "*.pdf", SearchOption.AllDirectories)
+                var pdfs = Directory.GetFiles(Path.Combine(ud, projet), "*.pdf", SearchOption.AllDirectories)
                                     .Select(f => new FileInfo(f))
-                                    .Where(f => f.LastWriteTime.Date == radDateTimePicker1.Value)
-                                    .Sum(f => new PdfReader(f.FullName).NumberOfPages);
-                
+                                    .Where(f => f.LastWriteTime.Date == radDateTimePicker1.Value);
+                var pages =pdfs.Sum(f => new PdfReader(f.FullName).NumberOfPages);
+                docWithPages = $"{pdfs.Count()};{pages}";
+                if (pages == 0)
+                    docWithPages = "0";
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            return prcount;
+            return docWithPages;
         }
 
 

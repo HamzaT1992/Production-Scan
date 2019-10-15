@@ -9,11 +9,11 @@ namespace ProdScan
     class UserProd
     {
         public string Name { get; set; }
-        public int BANQUE { get; set; }
-        public int Client { get; set; }
-        public int FOURNISSEUR { get; set; }
-        public int SCAN { get; set; }
-        public int Total { get; set; }
+        public string BANQUE { get; set; }
+        public string Client { get; set; }
+        public string FOURNISSEUR { get; set; }
+        public string SCAN { get; set; }
+        public string Total { get; set; }
 
         public UserProd()
         {
@@ -21,7 +21,22 @@ namespace ProdScan
         }
         public void calculTotal()
         {
-            Total = BANQUE + Client + FOURNISSEUR + SCAN;
+            var valB = getNumberOfDocsWithPages(BANQUE);
+            var valC = getNumberOfDocsWithPages(Client);
+            var valF = getNumberOfDocsWithPages(FOURNISSEUR);
+            var valS = getNumberOfDocsWithPages(SCAN);
+            var totalDocs = valB[0] + valC[0] + valF[0] + valS[0];
+            var TotalPages = valB[1] + valC[1] + valF[1] + valS[1];
+
+            Total = $"{totalDocs};{TotalPages}";
+        }
+
+        private int[] getNumberOfDocsWithPages(string prg)
+        {
+            if (prg == "0")
+                return new int[] { 0, 0 };
+            
+            return Array.ConvertAll( prg.Split(';'),int.Parse);
         }
     }
 }
