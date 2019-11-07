@@ -14,6 +14,7 @@ using iTextSharp.text.pdf;
 using Telerik.WinControls.Export;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ProdScan
 {
@@ -26,50 +27,49 @@ namespace ProdScan
         public ProdJour()
         {
             InitializeComponent();
+
         }
 
         private async void Form1_Load(object sender, EventArgs e)
         {
+            // Set a timer
+            DateTime now = DateTime.Now;
+            DateTime when = now.AddHours(1);
+            timer1.Interval = (int)((when - now).TotalMilliseconds);
+            timer1.Start();
+            // start loading
             loading = true;
             radDateTimePicker1.Enabled = false;
             radWaitingBar1.Visible = true;
             button1.Enabled = false;
             radWaitingBar1.StartWaiting();
+            var empty = true;
 
-            var userDirs = Directory.GetDirectories(chemin)
-                                    .Where(d => d.Contains("POSTE_"))
-                                    .ToArray();
-            await Task.Run(() =>
+            if (File.Exists("Data.bin"))
             {
-                int count = 0;
-                foreach (var udir in userDirs)
+                try
                 {
-                    var projectDirs = Directory.GetDirectories(udir);
-                    var uparts = new DirectoryInfo(udir).Name.Split(' ');
-                    var uName = uparts.Length == 2 ? uparts[1] : uparts[1]+" "+uparts[2];
-
-                    Allusers.Add(uName);
-
-                    foreach (var pdir in projectDirs)
+                    using (Stream stream = File.Open("Data.bin", FileMode.Open))
                     {
-                        
-                        var projName = new DirectoryInfo(pdir).Name;
-                        if (projName == "SCAN")
-                            continue;
+                        BinaryFormatter bin = new BinaryFormatter();
 
-                        AllPdfs.AddRange(Directory.GetFiles(pdir, "*.pdf", SearchOption.AllDirectories)
-                                            .Select(f => new DocInfos()
-                                            {
-                                                UserName = uName,
-                                                Project = projName,
-                                                File = new FileInfo(f),
-                                                Pages = getpdfPages(f)
-                                            })
-                                            .ToList());
-                        Console.WriteLine(++count);
+                        AllPdfs = (List<DocInfos>)bin.Deserialize(stream);
+                        if (AllPdfs.Count > 0)
+                        {
+                            empty = false;
+                            await Task.Run(() => Getpdfs(empty));
+                        }
                     }
                 }
-            });
+                catch (IOException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            else
+            {
+                await Task.Run(() => Getpdfs(empty));
+            }
 
             radWaitingBar1.StopWaiting();
             radWaitingBar1.Visible = false;
@@ -207,6 +207,79 @@ namespace ProdScan
             }
 
             return nump;
+        }
+        private void Getpdfs(bool empty)
+        {
+            var userDirs = Directory.GetDirectories(chemin)
+                        .Where(d => d.Contains("POSTE_"))
+                        .ToArray();
+            
+            int count = 0;
+            foreach (var udir in userDirs)
+            {
+                var projectDirs = Directory.GetDirectories(udir);
+                var uparts = new DirectoryInfo(udir).Name.Split(' ');
+                var uName = uparts.Length == 2 ? uparts[1] : uparts[1] + " " + uparts[2];
+
+                Allusers.Add(uName);
+
+                foreach (var pdir in projectDirs)
+                {
+
+                    var projName = new DirectoryInfo(pdir).Name;
+                    if (projName == "SCAN")
+                        continue;
+
+                    if (!empty)
+                    {
+                        AllPdfs.AddRange(Directory.GetFiles(pdir, "*.pdf", SearchOption.AllDirectories)
+                                                    .Where(f => new FileInfo(f).LastWriteTime.Date == DateTime.Today.Date)
+                                                    .Select(f => new DocInfos()
+                                                    {
+                                                        UserName = uName,
+                                                        Project = projName,
+                                                        File = new FileInfo(f),
+                                                        Pages = getpdfPages(f)
+                                                    })
+                                                    .Where(f => !AllPdfs.Exists(df => df.CompareTo(f) == 1))
+                                                    .ToList()
+                        );
+                    }
+                    else
+                    {
+                        AllPdfs.AddRange(Directory.GetFiles(pdir, "*.pdf", SearchOption.AllDirectories)
+                                                    .Select(f => new DocInfos()
+                                                    {
+                                                        UserName = uName,
+                                                        Project = projName,
+                                                        File = new FileInfo(f),
+                                                        Pages = getpdfPages(f)
+                                                    })
+                                                    .ToList()
+                        );
+                    }
+
+                    Console.WriteLine(++count);
+                }
+                try
+                {
+                    using (Stream stream = File.Open("Data.bin", FileMode.Create))
+                    {
+                        BinaryFormatter bin = new BinaryFormatter();
+                        bin.Serialize(stream, AllPdfs);
+                    }
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            Close();
         }
 
         //private int countTotal()

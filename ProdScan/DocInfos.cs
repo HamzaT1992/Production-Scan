@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace ProdScan
 {
-    
-    class DocInfos
+    [Serializable()]
+    class DocInfos : IComparable<DocInfos>
     {
         public string UserName { get; set; }
         public string Project {get; set;}
@@ -18,5 +18,15 @@ namespace ProdScan
         {
 
         }
+
+        public int CompareTo(DocInfos obj)
+        {
+            if (File.FullName == obj.File.FullName && File.Length == obj.File.Length)
+            {
+                return 1;
+            }
+            return 0;
+        }
+
     }
 }
